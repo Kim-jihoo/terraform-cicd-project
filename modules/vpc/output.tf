@@ -43,12 +43,20 @@ output "vpc_id" {
 output "vpc_cidr" {
   value = aws_vpc.aws-vpc.cidr_block
 }
-output "nat_ip" {
-  value = aws_eip.nat-eip.public_ip
+output "nat_ip_az1" {
+  value = aws_eip.nat-eip-az1.public_ip
 }
-output "nat_id" {
-  value = aws_nat_gateway.vpc-nat.id
+output "nat_ip_az2" {
+  value = aws_eip.nat-eip-az2.public_ip
 }
+
+output "nat_id_az1" {
+  value = aws_nat_gateway.vpc-nat-az1.id
+}
+output "nat_id_az2" {
+  value = aws_nat_gateway.vpc-nat-az2.id
+}
+
 output "pri_rt_id" {
   value = aws_route_table.aws-rt-pri.id
 }
