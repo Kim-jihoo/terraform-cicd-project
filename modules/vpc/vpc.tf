@@ -96,22 +96,6 @@ resource "aws_subnet" "db-az2" {
   ]
 }
 
-# NAT - EIP 생성
-resource "aws_eip" "nat-eip-az1" {
-  depends_on = [aws_internet_gateway.vpc-igw]
-  tags = merge(tomap({
-    Name = "aws-eip-${var.stage}-${var.servicename}-nat-az1"
-  }), var.tags)
-}
-
-resource "aws_eip" "nat-eip-az2" {
-  depends_on = [aws_internet_gateway.vpc-igw]
-  tags = merge(tomap({
-    Name = "aws-eip-${var.stage}-${var.servicename}-nat-az2"
-  }), var.tags)
-}
-
-
 
 # # RDS Subnet Group 
 # # Fowler - Merge이후 주석 삭제
@@ -142,16 +126,32 @@ resource "aws_internet_gateway" "vpc-igw" {
 }
 
 # EIP for NAT
-resource "aws_eip" "nat-eip" {
+/*resource "aws_eip" "nat-eip" {
   #vpc = "true" Terraform 공식 문서에서 더 사용하지 말라고 함
   depends_on                = [aws_internet_gateway.vpc-igw]
   tags = merge(tomap({
          Name = "aws-eip-${var.stage}-${var.servicename}-nat"}), 
         var.tags)
+}*/
+
+# NAT - EIP 2개 생성
+resource "aws_eip" "nat-eip-az1" {
+  depends_on = [aws_internet_gateway.vpc-igw]
+  tags = merge(tomap({
+    Name = "aws-eip-${var.stage}-${var.servicename}-nat-az1"
+  }), var.tags)
 }
 
+resource "aws_eip" "nat-eip-az2" {
+  depends_on = [aws_internet_gateway.vpc-igw]
+  tags = merge(tomap({
+    Name = "aws-eip-${var.stage}-${var.servicename}-nat-az2"
+  }), var.tags)
+}
+
+
 # NAT
-resource "aws_nat_gateway" "vpc-nat" {
+/*resource "aws_nat_gateway" "vpc-nat" {
   allocation_id = aws_eip.nat-eip.id
   subnet_id     = aws_subnet.public-az1.id
   depends_on = [aws_internet_gateway.vpc-igw, 
@@ -159,6 +159,26 @@ resource "aws_nat_gateway" "vpc-nat" {
   tags = merge(tomap({
          Name = "aws-nat-${var.stage}-${var.servicename}"}), 
         var.tags)    
+}*/
+
+# NAT Gateway (AZ1)
+resource "aws_nat_gateway" "vpc-nat-az1" {
+  allocation_id = aws_eip.nat-eip-az1.id
+  subnet_id     = aws_subnet.public-az1.id
+  depends_on    = [aws_internet_gateway.vpc-igw, aws_eip.nat-eip-az1] 
+  tags = merge(tomap({
+    Name = "aws-nat-${var.stage}-${var.servicename}-az1"
+  }), var.tags)
+}
+
+# NAT Gateway (AZ2)
+resource "aws_nat_gateway" "vpc-nat-az2" {
+  allocation_id = aws_eip.nat-eip-az2.id
+  subnet_id     = aws_subnet.public-az2.id
+  depends_on    = [aws_internet_gateway.vpc-igw, aws_eip.nat-eip-az2]
+  tags = merge(tomap({
+    Name = "aws-nat-${var.stage}-${var.servicename}-az2"
+  }), var.tags)
 }
 
 
