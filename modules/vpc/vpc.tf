@@ -96,6 +96,23 @@ resource "aws_subnet" "db-az2" {
   ]
 }
 
+# NAT - EIP 생성
+resource "aws_eip" "nat-eip-az1" {
+  depends_on = [aws_internet_gateway.vpc-igw]
+  tags = merge(tomap({
+    Name = "aws-eip-${var.stage}-${var.servicename}-nat-az1"
+  }), var.tags)
+}
+
+resource "aws_eip" "nat-eip-az2" {
+  depends_on = [aws_internet_gateway.vpc-igw]
+  tags = merge(tomap({
+    Name = "aws-eip-${var.stage}-${var.servicename}-nat-az2"
+  }), var.tags)
+}
+
+
+
 # # RDS Subnet Group 
 # # Fowler - Merge이후 주석 삭제
 # resource "aws_db_subnet_group" "db-subnet-group-gitlab" {
