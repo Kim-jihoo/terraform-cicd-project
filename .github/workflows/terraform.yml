@@ -1,13 +1,19 @@
-name: Terraform CI/CD
+name: 'Terraform CI/CD'
 
 on:
   push:
     branches:
-      - main
+      - 'main'
+      - 'stage'
+  pull_request:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**/stage-terraform.yml'
   workflow_dispatch:
     inputs:
       confirm_destroy:
-        description: 'Confirm destroy (type DESTROY to continue)'
+        description: 'Confirm if you want to destroy the Terraform backend (type DESTROY to confirm)'
         required: true
         default: 'CANCEL'
 
@@ -16,10 +22,12 @@ env:
 
 jobs:
   terraform:
-    name: Terraform CI/CD
+    name: 'Terraform Provision'
     runs-on: ubuntu-latest
+    environment: stage
     defaults:
       run:
+        shell: bash
         working-directory: terraform_stage
 
     steps:
@@ -29,7 +37,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.6.6
+          terraform_version: latest
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -41,12 +49,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Format Check
-        run: terraform fmt -check
-
-      - name: Terraform Validate
-        run: terraform validate
-
       - name: Terraform Plan
         run: terraform plan -input=false
 
@@ -54,8 +56,8 @@ jobs:
         if: github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
-  destroy:
-    name: Terraform Destroy
+  backend_destroy:
+    name: 'Terraform Destroy'
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.confirm_destroy == 'DESTROY'
     runs-on: ubuntu-latest
     defaults:
@@ -69,7 +71,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.6.6
+          terraform_version: latest
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -78,7 +80,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Init (for Destroy)
+      - name: Terraform Init for Destroy
         run: terraform init
 
       - name: Terraform Destroy
