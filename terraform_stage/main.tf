@@ -2,11 +2,11 @@ terraform {
  required_version = ">= 1.0.0, < 2.0.0"
 
   backend "s3" {
-    bucket = "weekly-terraform-state"
+    bucket = "jihoo-terraform-state"
     key  = "stage/terraform/terraform.tfstate"
     region = "ap-northeast-2"
     encrypt = true
-    dynamodb_table = "weekly-terraform-state"
+    dynamodb_table = "jihoo-terraform-state"
   }
 }
 
@@ -42,7 +42,7 @@ module "vpc" {
   #security_attachments_propagation = merge(var.security_attachments_propagation, var.security_attachments)
 }
 
-# module "weekly-ec2" {
+# module "jihoo-ec2" {
 #   source              = "../modules/instance"
 
 #   stage        = var.stage

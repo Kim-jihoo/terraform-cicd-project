@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "terraform_state" { 
-  bucket = "weekly-terraform-state"
+  bucket = "jihoo-terraform-state"
   force_destroy = false
 }
 
@@ -44,15 +44,15 @@ resource "aws_s3_bucket_policy" "terraform_state_policy" {
         "s3:PutObject"
       ]
       Resource = [
-        "arn:aws:s3:::weekly-terraform-state",
-        "arn:aws:s3:::weekly-terraform-state/*"
+        "arn:aws:s3:::jihoo-terraform-state",
+        "arn:aws:s3:::jihoo-terraform-state/*"
       ]
     }]
   })
 }
 
 resource "aws_dynamodb_table" "terraform_lock" {
-  name         = "weekly-terraform-state"
+  name         = "jihoo-terraform-state"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 

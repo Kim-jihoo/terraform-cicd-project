@@ -5,19 +5,19 @@ variable "stage"{
 }
 variable "servicename"{
   type = string
-  default = "weekly"
+  default = "jihoo"
 }
 variable "tags"{
   type = map(string)
   default = {
-    "name" = "weekly-db"
+    "name" = "jihoo-db"
   }
 }
 
 ##RDS
 variable "dbname" { #required
   type=string
-  default = "weekly-db"
+  default = "jihoo-db"
 }
 variable "engine" {
   type=string

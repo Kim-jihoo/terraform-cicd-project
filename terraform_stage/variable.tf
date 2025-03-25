@@ -8,12 +8,12 @@ variable "stage" {
 }
 variable "servicename" {
   type = string
-  default = "terraform_weekly"
+  default = "terraform_jihoo"
 }
 variable "tags" {
   type = map(string)
   default = {
-    "name" = "weekly_VPC"
+    "name" = "jihoo_VPC"
   }
 }
 
@@ -100,7 +100,7 @@ variable "instance_ebs_volume" {
 ##RDS
 variable "rds_dbname" {
   type = string
-  default = "weekly"
+  default = "jihoo"
 }
 variable "rds_instance_count" {
   type = string
