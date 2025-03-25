@@ -231,19 +231,48 @@ resource "aws_route" "route-to-igw" {
     create_before_destroy = true
   }
 }
-
+/*
 resource "aws_route_table" "aws-rt-pri" {
   vpc_id = aws_vpc.aws-vpc.id
   tags = merge(tomap({
          Name = "aws-rt-${var.stage}-${var.servicename}-pri"}), 
         var.tags)
 }
-/*
+
 resource "aws_route" "route-to-nat" {
   route_table_id         = aws_route_table.aws-rt-pri.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id = aws_nat_gateway.vpc-nat.id
 }*/
+
+
+# AZ1용 Private Route Table
+resource "aws_route_table" "aws-rt-pri-az1" {
+  vpc_id = aws_vpc.aws-vpc.id
+  tags = merge(tomap({
+    Name = "aws-rt-${var.stage}-${var.servicename}-pri-az1"
+  }), var.tags)
+}
+
+resource "aws_route" "route-to-nat-az1" {
+  route_table_id         = aws_route_table.aws-rt-pri-az1.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.vpc-nat-az1.id
+}
+
+# AZ2용 Private Route Table
+resource "aws_route_table" "aws-rt-pri-az2" {
+  vpc_id = aws_vpc.aws-vpc.id
+  tags = merge(tomap({
+    Name = "aws-rt-${var.stage}-${var.servicename}-pri-az2"
+  }), var.tags)
+}
+
+resource "aws_route" "route-to-nat-az2" {
+  route_table_id         = aws_route_table.aws-rt-pri-az2.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.vpc-nat-az2.id
+}
 
 
 #routetable association
