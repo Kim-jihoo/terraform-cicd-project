@@ -1,0 +1,6 @@
+# Terraform 관련 파일 무시
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfstate.lock.info
