@@ -144,6 +144,17 @@ jobs:
           else
             echo "No objects to delete."
           fi
+
+      - name: Remove Lock in DynamoDB Table # DynamoDB Lock 삭제
+        run: |
+          TABLE_NAME="jihoo-terraform-state"
+          LOCK_ID="stage/terraform/terraform.tfstate"
+
+          echo "Deleting lock from DynamoDB table $TABLE_NAME with LockID $LOCK_ID"
+
+          aws dynamodb delete-item \
+            --table-name "$TABLE_NAME" \
+            --key "{\"LockID\": {\"S\": \"$LOCK_ID\"}}"
       
       - name: Terraform Init for Destroy
         run: |
