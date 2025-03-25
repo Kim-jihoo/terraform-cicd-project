@@ -137,4 +137,5 @@ jobs:
 
       - name: Terraform Destroy
         run: |
+          cd terraform_stage
           terraform destroy -auto-approve
