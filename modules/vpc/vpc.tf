@@ -238,12 +238,13 @@ resource "aws_route_table" "aws-rt-pri" {
          Name = "aws-rt-${var.stage}-${var.servicename}-pri"}), 
         var.tags)
 }
-
+/*
 resource "aws_route" "route-to-nat" {
   route_table_id         = aws_route_table.aws-rt-pri.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id = aws_nat_gateway.vpc-nat.id
-}
+}*/
+
 
 #routetable association
 resource "aws_route_table_association" "public-az1" {
@@ -254,6 +255,23 @@ resource "aws_route_table_association" "public-az2" {
  subnet_id      = aws_subnet.public-az2.id
  route_table_id = aws_route_table.aws-rt-pub.id
 }
+resource "aws_route_table_association" "service-az1" {
+  subnet_id      = aws_subnet.service-az1.id
+  route_table_id = aws_route_table.aws-rt-pri-az1.id
+}
+resource "aws_route_table_association" "service-az2" {
+  subnet_id      = aws_subnet.service-az2.id
+  route_table_id = aws_route_table.aws-rt-pri-az2.id
+}
+resource "aws_route_table_association" "db-az1" {
+  subnet_id      = aws_subnet.db-az1.id
+  route_table_id = aws_route_table.aws-rt-pri-az1.id
+}
+resource "aws_route_table_association" "db-az2" {
+  subnet_id      = aws_subnet.db-az2.id
+  route_table_id = aws_route_table.aws-rt-pri-az2.id
+}
+/*
 resource "aws_route_table_association" "service-az1" {
  subnet_id      = aws_subnet.service-az1.id
  route_table_id = aws_route_table.aws-rt-pri.id
@@ -269,5 +287,5 @@ resource "aws_route_table_association" "db-az1" {
 resource "aws_route_table_association" "db-az2" {
  subnet_id      = aws_subnet.db-az2.id
  route_table_id = aws_route_table.aws-rt-pri.id
-}
+}*/
 
