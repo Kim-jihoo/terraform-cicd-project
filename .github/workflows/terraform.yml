@@ -22,7 +22,8 @@ env:
 
 jobs:
   terraform:
-    name: 'Terraform Setup & Deploy'
+    name: 'Terraform Setup & Deploy' # destroy 때는 작동 안 하게 조건 추가
+    if: github.event.inputs.confirm_destroy != 'DESTROY' || github.event.inputs.confirm_destroy == null
     runs-on: ubuntu-latest
     environment: stage
     defaults:
