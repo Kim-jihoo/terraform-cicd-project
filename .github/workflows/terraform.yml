@@ -127,6 +127,24 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Remove all objects in S3 backend bucket #S3 destroy 추가
+        run: |
+          BUCKET_NAME="jihoo-terraform-state"
+          KEY_PREFIX="stage/terraform/"
+          
+          echo "Deleting all objects under s3://${BUCKET_NAME}/${KEY_PREFIX}"
+          
+          OBJECTS=$(aws s3api list-objects-v2 --bucket "$BUCKET_NAME" --prefix "$KEY_PREFIX" --query 'Contents[].Key' --output text)
+          
+          if [ -n "$OBJECTS" ]; then
+            for KEY in $OBJECTS; do
+              echo "Deleting: $KEY"
+              aws s3api delete-object --bucket "$BUCKET_NAME" --key "$KEY"
+            done
+          else
+            echo "No objects to delete."
+          fi
+      
       - name: Terraform Init for Destroy
         run: |
           cd terraform_stage
