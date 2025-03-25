@@ -57,6 +57,10 @@ output "nat_id_az2" {
   value = aws_nat_gateway.vpc-nat-az2.id
 }
 
-output "pri_rt_id" {
-  value = aws_route_table.aws-rt-pri.id
+output "pri_rt_az1_id" {
+  value = aws_route_table.aws-rt-pri-az1.id
 }
+output "pri_rt_az2_id" {
+  value = aws_route_table.aws-rt-pri-az2.id
+}
+
