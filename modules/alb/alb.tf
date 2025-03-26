@@ -87,6 +87,8 @@ resource "aws_lb_target_group" "target-group" {
         var.tags)
 }
 
+# target_groupt_attachment는 ECS가 자동으로 연결하므로 삭제
+/*
 resource "aws_lb_target_group_attachment" "target-group-attachment" {
   count = length(var.instance_ids)
   target_group_arn = aws_lb_target_group.target-group.arn
@@ -96,7 +98,7 @@ resource "aws_lb_target_group_attachment" "target-group-attachment" {
   availability_zone = var.availability_zone
   
   depends_on =[aws_lb_target_group.target-group]
-}
+}*/
 
 #alb sg
 resource "aws_security_group" "sg-alb" {
