@@ -13,7 +13,7 @@ EOF
   )
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [var.security_group_id]
+    security_groups             = [var.security_group_ids[0]]
   }
   tag_specifications {
     resource_type = "instance"

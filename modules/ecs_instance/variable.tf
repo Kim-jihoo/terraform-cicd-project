@@ -31,10 +31,10 @@ variable "security_group_ids" {
 variable "ami_id" {
   type = string
 }
-
+/* 불필요 삭제
 variable "security_group_id" {
   type = string
-}
+}*/
 
 variable "instance_profile_name" {
   type = string

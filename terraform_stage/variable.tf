@@ -122,10 +122,11 @@ variable "sg_allow_comm_list" {
 
 
 ##Instance
+/* ami_id와 중복으로 제거
 variable "ami"{
   type = string
   default = "ami-04c596dcf23eb98d8"
-}
+}*/
 variable "instance_type" {
   type = string
   default = "t2.micro"
@@ -210,4 +211,15 @@ variable "memory" {
 variable "desired_count" {
   type    = number
   default = 1
+}
+
+# ecs_instance
+variable "ami_id" {
+  type    = string
+  default = "ami-04c596dcf23eb98d8"
+}
+
+variable "key_name" {
+  type    = string
+  default = "" # 실제 EC2에 접근하려면 EC2 키페어 이름을 여기에 넣어야 합니다
 }

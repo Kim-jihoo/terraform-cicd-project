@@ -92,6 +92,22 @@ module "ecs" {
   assign_public_ip    = false
   alb_listener_dependency = [module.alb.lb-listener-443]
 }
+# ecs_instance
+module "ecs_instance" {
+  source = "../modules/ecs_instance"
+
+  stage                = var.stage
+  servicename          = var.servicename
+  tags                 = var.tags
+  ami_id               = var.ami_id
+  instance_type        = var.instance_type
+  subnet_ids           = [module.vpc.service-az1.id, module.vpc.service-az2.id]
+  security_group_ids = [module.ecs.sg-ecs-id]
+  instance_profile_name = "ecsInstanceRole" # 사전에 생성해둔 EC2용 IAM 역할
+  key_name             = var.key_name
+  cluster_name         = module.ecs.cluster-name
+}
+
 
 # module "jihoo-ec2" {
 #   source              = "../modules/instance"
