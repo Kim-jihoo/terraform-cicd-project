@@ -31,6 +31,7 @@ variable "subnet_ids" {
 
 variable "aws_s3_lb_logs_name" {
     type  = string
+    default = "jihoo-alb-access-logs"
 }
 variable "idle_timeout" {
     type  = string
