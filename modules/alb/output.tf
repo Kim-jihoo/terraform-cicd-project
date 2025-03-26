@@ -12,9 +12,9 @@ output "sg-alb-id" {
 }
 
 output "target-group-arn" {
-  value = aws_lb_target_group.this.arn
+  value = aws_lb_target_group.target-group.arn
 }
 
 output "lb-listener-443" {
-  value = aws_lb_listener.https_listener.id
+  value = aws_lb_listener.https_listener-443.id
 }
