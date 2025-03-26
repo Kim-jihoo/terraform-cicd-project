@@ -18,15 +18,15 @@ variable "internal" {
     default = true
 }
 
-/* ECS 사용으로 불필요
 variable "public" {
     type  = bool
     default = false
-}*/
+}
 
 variable "subnet_ids" {
-    type  = list
-    default = []
+   #type  = list
+   type = list(string)
+   # default = []
 }
 
 variable "aws_s3_lb_logs_name" {
@@ -46,9 +46,10 @@ variable "port" {
 variable "vpc_id" {
     type  = string
 }
+/* ECS에서 불필요
 variable "instance_ids" {
     type  = list
-}
+}*/
 variable "domain" {
     type  = string
     default = ""
@@ -70,13 +71,16 @@ variable "hc_unhealthy_threshold" {
     default = 2
 }
 variable "sg_allow_comm_list" {
-    type = list
+    #type = list(String)
+    type = list(string)
 }
-/* ECS 사용으로 불필요
+
+# default instance -> ip로 수정
 variable "target_type" {
     type = string
-    default = "instance"
+    default = "ip"
 }
+/* ECS에서 사용 불필요
 variable "availability_zone" {
     type = string
     default = ""

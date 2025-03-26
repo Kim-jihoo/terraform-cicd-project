@@ -71,6 +71,55 @@ variable "subnet_db_az2" {
 #   type = map
 # }
 
+#ALB
+variable "aws_s3_lb_logs_name" {
+  type = string
+  default = "YOUR-S3-BUCKET-NAME" # 실제 S3 버킷 이름으로 변경
+}
+
+variable "idle_timeout" {
+  type    = string
+  default = "60"
+}
+
+variable "certificate_arn" {
+  type = string
+  default = "" # ACM에서 발급받은 인증서 ARN
+}
+
+variable "domain" {
+  type    = string
+  default = "" # ex: example.com
+}
+
+variable "hostzone_id" {
+  type    = string
+  default = "" # Route 53 호스팅존 ID
+}
+variable "port" {
+  type    = string
+  default = "80"
+}
+
+variable "hc_path" {
+  type    = string
+  default = "/"
+}
+
+variable "hc_healthy_threshold" {
+  type    = number
+  default = 5
+}
+
+variable "hc_unhealthy_threshold" {
+  type    = number
+  default = 2
+}
+variable "sg_allow_comm_list" {
+  type    = list(string)
+  default = ["0.0.0.0/0"]
+}
+
 
 ##Instance
 variable "ami"{

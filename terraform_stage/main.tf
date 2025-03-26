@@ -30,6 +30,8 @@ module "vpc" {
   subnet_db_az1  = var.subnet_db_az1
   subnet_db_az2  = var.subnet_db_az2
  
+
+ 
   ##SecurityGroup
   #sg_allow_comm_list = concat(var.ext_sg_allow_list, ["${module.vpc.nat_ip}/32", var.vpc_ip_range])
 
@@ -41,6 +43,31 @@ module "vpc" {
   #auto_accept_shared_attachments = true
   #security_attachments_propagation = merge(var.security_attachments_propagation, var.security_attachments)
 }
+
+#ALB
+module "alb" {
+  source = "../modules/alb"
+
+  stage       = var.stage
+  servicename = var.servicename
+  tags        = var.tags
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = [module.vpc.service-az1.id, module.vpc.service-az2.id]
+
+  sg_allow_comm_list   = var.sg_allow_comm_list
+  aws_s3_lb_logs_name  = var.aws_s3_lb_logs_name
+  idle_timeout         = var.idle_timeout
+  certificate_arn      = var.certificate_arn
+  port                 = var.port
+  domain               = var.domain
+  hostzone_id          = var.hostzone_id
+  hc_path              = var.hc_path
+  hc_healthy_threshold = var.hc_healthy_threshold
+  hc_unhealthy_threshold = var.hc_unhealthy_threshold
+}
+
+
 
 # module "jihoo-ec2" {
 #   source              = "../modules/instance"
