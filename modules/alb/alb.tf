@@ -36,7 +36,7 @@ resource "aws_lb_listener" "lb-listener-443" {
     target_group_arn = aws_lb_target_group.target-group.arn
   }
   tags = var.tags
-  depends_on =[aws_lb_target_group.target-group]
+  depends_on =[aws_lb_target_group.target-group] #직접 참조가 있어서 생략함
 }*/
 
 default_action {
@@ -75,7 +75,8 @@ resource "aws_lb_target_group" "target-group" {
   port     = var.port
   protocol = "HTTP"
   vpc_id   = var.vpc_id
-  target_type = var.target_type
+  #target_type = var.target_type
+  target_type = "ip" # ECS와 연동할 것이므로 IP 기반
   health_check {
     path = var.hc_path
     healthy_threshold   = var.hc_healthy_threshold
