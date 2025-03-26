@@ -48,7 +48,7 @@ resource "aws_ecs_service" "this" {
     container_port   = var.container_port
   }
 
-  depends_on = var.alb_listener_dependency
+  #depends_on = var.alb_listener_dependency 에러로 삭제
 
   tags = var.tags
 }
