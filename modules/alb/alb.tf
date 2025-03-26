@@ -43,7 +43,7 @@ resource "aws_lb_listener" "lb-listener-443" {
 }
 
 
-
+/* HTTPS 당장 사용 못해서 일단 주석
 resource "aws_lb_listener" "lb-listener-80" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "80"
@@ -59,7 +59,22 @@ resource "aws_lb_listener" "lb-listener-80" {
     }
   }
   tags = var.tags
+}*/
+
+# HTTPS 사용하면 위로 수정 예정
+resource "aws_lb_listener" "lb-listener-80" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target-group.arn
+  }
+
+  tags = var.tags
 }
+
 
 
 resource "aws_lb_target_group" "target-group" {
