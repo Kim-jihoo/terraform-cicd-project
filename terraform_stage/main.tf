@@ -105,7 +105,7 @@ module "ecs_instance" {
   security_group_ids = [module.ecs.sg-ecs-id]
   instance_profile_name = "ecsInstanceRole" # 사전에 생성해둔 EC2용 IAM 역할
   key_name             = var.key_name
-  cluster_name         = module.ecs.cluster-name
+  cluster_name         = module.ecs.ecs_cluster_name
 }
 
 
