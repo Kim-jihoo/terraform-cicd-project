@@ -111,7 +111,7 @@ resource "aws_security_group" "sg-alb" {
     protocol    = "TCP"
     cidr_blocks = var.sg_allow_comm_list
     description = ""
-    self        = true
+    #self        = true cidr과 self 동시에 쓰면 충돌날 수 있음
   }
   ingress {
     from_port   = 80
