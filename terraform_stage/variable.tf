@@ -8,7 +8,7 @@ variable "stage" {
 }
 variable "servicename" {
   type = string
-  default = "terraform_jihoo"
+  default = "terraform-jihoo"
 }
 variable "tags" {
   type = map(string)
