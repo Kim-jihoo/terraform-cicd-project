@@ -173,3 +173,36 @@ variable "ebs_kms_key_id" {
   type = string
   default = "arn:aws:kms:ap-northeast-2:471112992234:key/43b0228d-0a06-465c-b25c-7480b07b5276"
 }
+
+# ECS
+variable "container_image" {
+  type = string
+}
+
+variable "container_port" {
+  type    = number
+  default = 80
+}
+
+variable "cpu" {
+  type    = number
+  default = 256
+}
+
+variable "memory" {
+  type    = number
+  default = 512
+}
+
+variable "execution_role_arn" {
+  type = string
+}
+
+variable "task_role_arn" {
+  type = string
+}
+
+variable "desired_count" {
+  type    = number
+  default = 1
+}

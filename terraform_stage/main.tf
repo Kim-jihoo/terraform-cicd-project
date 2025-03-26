@@ -67,7 +67,31 @@ module "alb" {
   hc_unhealthy_threshold = var.hc_unhealthy_threshold
 }
 
+# ECS
+module "ecs" {
+  source = "../modules/ecs"
 
+  stage       = var.stage
+  servicename = var.servicename
+  tags        = var.tags
+
+  cluster_name        = "ecs-cluster-${var.stage}-${var.servicename}"
+  service_name        = "ecs-service-${var.stage}-${var.servicename}"
+  container_image     = var.container_image
+  container_port      = var.container_port
+  cpu                 = var.cpu
+  memory              = var.memory
+  subnet_ids          = [module.vpc.service-az1.id, module.vpc.service-az2.id]
+  vpc_id              = module.vpc.vpc_id
+  alb_sg_id           = module.alb.sg-alb-id
+  security_group_ids  = [] # 보안 그룹 직접 생성되므로 이 필드는 사용되지 않음
+  target_group_arn    = module.alb.target-group-arn
+  execution_role_arn  = var.execution_role_arn
+  task_role_arn       = var.task_role_arn
+  desired_count       = var.desired_count
+  assign_public_ip    = false
+  alb_listener_dependency = [module.alb.lb-listener-443]
+}
 
 # module "jihoo-ec2" {
 #   source              = "../modules/instance"
