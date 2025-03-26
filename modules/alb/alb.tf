@@ -9,7 +9,7 @@ resource "aws_lb" "alb" { #alb 생성
   security_groups    = [aws_security_group.sg-alb.id]
   subnets            = var.subnet_ids
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false # alb 삭제 방지 끄기(이후 운영 시 true 고려)
 
   idle_timeout = var.idle_timeout
   
