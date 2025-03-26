@@ -12,7 +12,7 @@ variable "tags" {
 
 variable "ami" {
   type = string
-  default = "ami-04c596dcf23eb98d8" # Amazon Linux 2 또는 ECS 최적화 AMI
+  default = "ami-062cddb9d94dcf95d"
 }
 
 variable "instance_type" {
