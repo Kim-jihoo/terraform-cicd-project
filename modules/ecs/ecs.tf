@@ -38,7 +38,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     subnets          = var.subnet_ids
-    security_groups  = var.security_group_ids
+    security_groups  = [aws_security_group.sg-ecs.id]
     assign_public_ip = false
   }
 
@@ -52,3 +52,29 @@ resource "aws_ecs_service" "this" {
 
   tags = var.tags
 }
+
+# security group
+
+resource "aws_security_group" "sg-ecs" {
+  name   = "aws-sg-${var.stage}-${var.servicename}-ecs"
+  vpc_id = var.vpc_id
+
+  ingress {
+    from_port       = var.container_port
+    to_port         = var.container_port
+    protocol        = "tcp"
+    security_groups = [var.alb_sg_id] # ALB에서 오는 트래픽만 허용
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge({
+    Name = "aws-sg-${var.stage}-${var.servicename}-ecs"
+  }, var.tags)
+}
+
