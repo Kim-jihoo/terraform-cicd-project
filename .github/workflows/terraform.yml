@@ -74,9 +74,11 @@ jobs:
 
           S3_BUCKET="jihoo-terraform-state"
           DYNAMODB_TABLE="jihoo-terraform-state"
+          ALB_LOG_BUCKET="jihoo-alb-access-logs"
 
           BUCKET_EXISTS=$(check_bucket_exists "$S3_BUCKET")
           DYNAMODB_EXISTS=$(check_dynamodb_exists "$DYNAMODB_TABLE")
+          ALB_BUCKET_EXISTS=$(check_bucket_exists "$ALB_LOG_BUCKET")
 
           if [ -d backend ]; then
               cd backend
@@ -95,6 +97,20 @@ jobs:
               terraform init
               terraform apply -auto-approve
           fi
+
+          if [ "$ALB_BUCKET_EXISTS" = "false" ]; then
+              echo "ALB 로그용 S3 버킷이 존재하지 않아 backend/alb-logs.tf를 적용합니다"
+
+              if [ "$BUCKET_EXISTS" = "false" ] || [ "$DYNAMODB_EXISTS" = "false" ]; then
+                echo "이미 init 되어 있으므로 생략"
+              else
+                terraform init
+              fi
+
+              terraform apply -target=aws_s3_bucket.alb_logs -auto-approve
+          fi
+
+
 
       - name: Terraform Plan & Apply (Main Infra)
         run: |
