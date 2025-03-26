@@ -182,12 +182,13 @@ variable "container_image" {
 
 variable "execution_role_arn" {
   type = string
-  default = "arn:aws:iam::762233749320:role/dummy-ecs-execution-role" # 임시 역할
+  default = "arn:aws:iam::762233749320:role/ecsTaskExecutionRole"
 }
 
+
 variable "task_role_arn" {
-  type = string
-  default = "arn:aws:iam::762233749320:role/dummy-ecs-task-role" # 임시 역할
+  type    = string
+  default = "arn:aws:iam::762233749320:role/ecsTaskRole"
 }
 
 
