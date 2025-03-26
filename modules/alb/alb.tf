@@ -34,23 +34,11 @@ resource "aws_lb_listener" "lb-listener-443" {
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = var.certificate_arn
 
-#ECS 아직 연결 안 해서 fixed-response 사용 ECS 연결 후 다시 수정
-/*
+
+
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target-group.arn
-  }
-  tags = var.tags
-  depends_on =[aws_lb_target_group.target-group] #직접 참조가 있어서 생략함
-}*/
-
-default_action {
-    type             = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Service not ready"
-      status_code  = "503"
-    }
   }
 
   tags = var.tags
