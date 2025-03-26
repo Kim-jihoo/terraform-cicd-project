@@ -7,10 +7,12 @@ resource "aws_launch_template" "ecs_instance" {
   }
   key_name = var.key_name
   user_data = base64encode(<<EOF
-#!/bin/bash
-echo ECS_CLUSTER=${var.cluster_name} >> /etc/ecs/ecs.config
-EOF
+    #!/bin/bash
+    echo ECS_CLUSTER=${var.cluster_name} >> /etc/ecs/ecs.config
+    systemctl enable --now ecs
+    EOF
   )
+
   network_interfaces {
     associate_public_ip_address = false
     security_groups             = [var.security_group_ids[0]]
