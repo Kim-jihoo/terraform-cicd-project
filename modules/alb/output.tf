@@ -16,5 +16,5 @@ output "target-group-arn" {
 }
 
 output "lb-listener-443" {
-  value = aws_lb_listener.https_listener-443.id
+  value = aws_lb_listener.lb-listener-443.id
 }
