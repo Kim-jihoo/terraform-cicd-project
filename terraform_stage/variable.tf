@@ -176,8 +176,20 @@ variable "ebs_kms_key_id" {
 
 # ECS
 variable "container_image" {
-  type = string
+  type    = string
+  default = "nginx:latest"
 }
+
+variable "execution_role_arn" {
+  type = string
+  default = "arn:aws:iam::762233749320:role/dummy-ecs-execution-role" # 임시 역할
+}
+
+variable "task_role_arn" {
+  type = string
+  default = "arn:aws:iam::762233749320:role/dummy-ecs-task-role" # 임시 역할
+}
+
 
 variable "container_port" {
   type    = number
@@ -192,14 +204,6 @@ variable "cpu" {
 variable "memory" {
   type    = number
   default = 512
-}
-
-variable "execution_role_arn" {
-  type = string
-}
-
-variable "task_role_arn" {
-  type = string
 }
 
 variable "desired_count" {
