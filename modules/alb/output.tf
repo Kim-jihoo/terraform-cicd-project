@@ -7,3 +7,14 @@ output "alb_dns_name" {
 output "alb_zone_id" {
   value = aws_lb.alb.zone_id
 }
+output "sg-alb-id" {
+  value = aws_security_group.sg-alb.id
+}
+
+output "target-group-arn" {
+  value = aws_lb_target_group.this.arn
+}
+
+output "lb-listener-443" {
+  value = aws_lb_listener.https_listener.id
+}
