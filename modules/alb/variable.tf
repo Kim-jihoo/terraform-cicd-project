@@ -18,10 +18,11 @@ variable "internal" {
     default = true
 }
 
+/* ECS 사용으로 불필요
 variable "public" {
     type  = bool
     default = false
-}
+}*/
 
 variable "subnet_ids" {
     type  = list
@@ -71,6 +72,7 @@ variable "hc_unhealthy_threshold" {
 variable "sg_allow_comm_list" {
     type = list
 }
+/* ECS 사용으로 불필요
 variable "target_type" {
     type = string
     default = "instance"
@@ -78,4 +80,4 @@ variable "target_type" {
 variable "availability_zone" {
     type = string
     default = ""
-}
+}*/
