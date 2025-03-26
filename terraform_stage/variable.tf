@@ -74,7 +74,7 @@ variable "subnet_db_az2" {
 #ALB
 variable "aws_s3_lb_logs_name" {
   type = string
-  default = "YOUR-S3-BUCKET-NAME" # 실제 S3 버킷 이름으로 변경
+  default = "jihoo-alb-access-logs"
 }
 
 variable "idle_timeout" {
