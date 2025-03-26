@@ -84,6 +84,7 @@ resource "aws_lb" "alb" { #alb 생성
 
 
 resource "aws_lb_listener" "lb-listener-443" {
+  count             = var.certificate_arn != "" ? 1 : 0 #ACM 인증 안 한 경우
   load_balancer_arn = aws_lb.alb.arn
   port              = "443"
   protocol          = "HTTPS"
