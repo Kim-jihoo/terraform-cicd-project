@@ -6,7 +6,7 @@ resource "aws_ecs_cluster" "this" { #이후에 this 수정(리소스 많아지�
 resource "aws_ecs_task_definition" "this" {
   family                   = "ecs-task-${var.stage}-${var.servicename}"
   requires_compatibilities = ["EC2"]
-  network_mode            = "bridge"
+  network_mode            = "awsvpc"
   cpu                     = var.cpu
   memory                  = var.memory
   execution_role_arn      = var.execution_role_arn
