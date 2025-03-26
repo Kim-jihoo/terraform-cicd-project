@@ -90,7 +90,9 @@ module "ecs" {
   task_role_arn       = var.task_role_arn
   desired_count       = var.desired_count
   assign_public_ip    = false
-  alb_listener_dependency = [module.alb.lb-listener-443]
+  #alb_listener_dependency = [module.alb.lb-listener-443]
+  alb_listener_dependency = var.certificate_arn != "" ? [module.alb.lb-listener-443[0]] : [] #certificate_arn이 비어있을 때
+
 }
 # ecs_instance
 module "ecs_instance" {
