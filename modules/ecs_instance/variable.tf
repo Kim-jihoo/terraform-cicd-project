@@ -12,7 +12,7 @@ variable "tags" {
 
 variable "ami" {
   type = string
-  default = "ami-062cddb9d94dcf95d"
+  default = "ami-0a07a3809aa66dcac"
 }
 
 variable "instance_type" {
