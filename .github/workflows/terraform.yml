@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - 'main'
-      - 'stage'
+      - 'dev'
   pull_request:
     branches:
       - 'main'
     paths-ignore:
-      - '**/stage-terraform.yml'
+      - '**/dev-terraform.yml'
   workflow_dispatch:
     inputs:
       confirm_destroy:
@@ -25,7 +25,7 @@ jobs:
     name: 'Terraform Setup & Deploy' # destroy 때는 작동 안 하게 조건 추가
     if: github.event.inputs.confirm_destroy != 'DESTROY' || github.event.inputs.confirm_destroy == null
     runs-on: ubuntu-latest
-    environment: stage
+    environment: dev
     defaults:
       run:
         shell: bash
@@ -118,7 +118,7 @@ jobs:
           terraform init \
             -backend-config="region=ap-northeast-2" \
             -backend-config="bucket=jihoo-terraform-state" \
-            -backend-config="key=stage/terraform/terraform.tfstate"
+            -backend-config="key=dev/terraform/terraform.tfstate"
 
           terraform plan -input=false
           terraform apply -auto-approve -input=false
@@ -149,7 +149,7 @@ jobs:
           terraform init \
             -backend-config="region=ap-northeast-2" \
             -backend-config="bucket=jihoo-terraform-state" \
-            -backend-config="key=stage/terraform/terraform.tfstate"
+            -backend-config="key=dev/terraform/terraform.tfstate"
 
       - name: Terraform Destroy
         run: |
