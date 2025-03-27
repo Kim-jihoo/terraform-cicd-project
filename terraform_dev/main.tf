@@ -3,7 +3,7 @@ terraform {
 
   backend "s3" {
     bucket = "jihoo-terraform-state"
-    key  = "stage/terraform/terraform.tfstate"
+    key  = "dev/terraform/terraform.tfstate"
     region = "ap-northeast-2"
     encrypt = true
     dynamodb_table = "jihoo-terraform-state"

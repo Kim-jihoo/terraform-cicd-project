@@ -4,7 +4,7 @@ variable "region" {
 }
 variable "stage" {
   type = string
-  default = "stage"
+  default = "dev"
 }
 variable "servicename" {
   type = string
