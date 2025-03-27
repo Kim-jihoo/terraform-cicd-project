@@ -9,9 +9,11 @@ resource "aws_launch_template" "ecs_instance" {
   user_data = base64encode(<<EOF
 #!/bin/bash
 echo ECS_CLUSTER=${var.cluster_name} >> /etc/ecs/ecs.config
+echo ECS_BACKEND_HOST=ecs.amazonaws.com >> /etc/ecs/ecs.config
 systemctl enable --now ecs
 EOF
-)
+  )
+
 
 
   network_interfaces {
