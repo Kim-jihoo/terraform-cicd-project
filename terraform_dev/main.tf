@@ -110,7 +110,7 @@ module "ecs_instance" {
   cluster_name         = module.ecs.ecs_cluster_name
 }
 
-#RDS
+/*RDS -> dev에서는 사용 안 함
  module "rds" {
   source       = "../modules/aurora"
   stage        = var.stage
@@ -128,7 +128,7 @@ module "ecs_instance" {
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
   sg_allow_ingress_sg_list_aurora = var.sg_allow_ingress_sg_list_aurora
   depends_on = [module.vpc]
-}
+}*/
 
 # module "jihoo-ec2" {
 #   source              = "../modules/instance"
