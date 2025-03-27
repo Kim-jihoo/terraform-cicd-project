@@ -11,7 +11,7 @@ resource "aws_rds_cluster" "rds-cluster" {
   preferred_backup_window         = var.backup_window #"18:00-20:00"
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.rds-cluster-parameter-group.name
   vpc_security_group_ids          = [aws_security_group.sg-aurora.id]
-  deletion_protection             = true
+  deletion_protection             = false # 운영 시 true로 변경
   storage_encrypted               = true
   kms_key_id                      = var.kms_key_id
   skip_final_snapshot              = true
