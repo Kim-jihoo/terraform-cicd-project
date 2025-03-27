@@ -216,7 +216,7 @@ variable "desired_count" {
 # ecs_instance
 variable "ami_id" {
   type    = string
-  default = "ami-0a94cc3e3653bd73c"
+  default = "ami-062cddb9d94dcf95d"
 }
 
 variable "key_name" {
