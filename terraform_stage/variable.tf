@@ -223,3 +223,7 @@ variable "key_name" {
   type    = string
   default = "" # 실제 EC2에 접근하려면 EC2 키페어 이름을 여기에 넣어야 합니다
 }
+variable "sg_allow_ingress_sg_list_aurora" {
+  type    = list(string)
+  default = []
+}
