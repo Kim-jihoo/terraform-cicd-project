@@ -64,3 +64,9 @@ output "pri_rt_az2_id" {
   value = aws_route_table.aws-rt-pri-az2.id
 }
 
+output "db_subnet_ids" {
+  value = [
+    aws_subnet.db-az1.id,
+    aws_subnet.db-az2.id
+  ]
+}
