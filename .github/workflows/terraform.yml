@@ -114,7 +114,7 @@ jobs:
 
       - name: Terraform Plan & Apply (Main Infra)
         run: |
-          cd terraform_stage
+          cd terraform_dev
           terraform init \
             -backend-config="region=ap-northeast-2" \
             -backend-config="bucket=jihoo-terraform-state" \
@@ -145,7 +145,7 @@ jobs:
       
       - name: Terraform Init for Destroy
         run: |
-          cd terraform_stage
+          cd terraform_dev
           terraform init \
             -backend-config="region=ap-northeast-2" \
             -backend-config="bucket=jihoo-terraform-state" \
@@ -153,5 +153,5 @@ jobs:
 
       - name: Terraform Destroy
         run: |
-          cd terraform_stage
+          cd terraform_dev
           terraform destroy -auto-approve
