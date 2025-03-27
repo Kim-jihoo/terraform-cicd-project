@@ -1,10 +1,10 @@
 resource "aws_rds_cluster" "rds-cluster" {
-  cluster_identifier              = lower("aws-rds-cluster-dev-jihoo-aurora-jihoo-db")
+  cluster_identifier              = lower("aws-rds-cluster-prod-jihoo-aurora-jihoo-db")
   engine                          = var.engine #"aurora-mysql"
   engine_version                  = var.engine_version #"8.mysql_aurora"
   availability_zones              = [element(var.az, 0), element(var.az, 1)]
   db_subnet_group_name            = aws_db_subnet_group.rds-subnet-group.id
-  database_name                   = "${var.dbname}db"
+  database_name                   = var.dbname
   master_username                 = var.master_username
   master_password                 = random_password.rds-password.result
   backup_retention_period         = var.backup_retention_period #30
@@ -26,7 +26,7 @@ resource "aws_rds_cluster" "rds-cluster" {
 
 resource "aws_rds_cluster_instance" "rds-instance" {
   count                      = var.rds_instance_count
-  identifier                  = lower("aws-rds-instance-dev-jihoo-aurora-jihoodb-${count.index}")
+  identifier                  = lower("aws-rds-instance-prod-jihoo-aurora-jihoodb-${count.index}")
   cluster_identifier          = aws_rds_cluster.rds-cluster.id
   engine                     = var.engine
   engine_version             = var.engine_version
@@ -52,7 +52,7 @@ resource "aws_db_subnet_group" "rds-subnet-group" {
   subnet_ids  = var.subnet_ids
 }
 resource "aws_rds_cluster_parameter_group" "rds-cluster-parameter-group" {
-  name=lower("aws-rds-cluster-parameter-group-dev-jihoo-aurora-jihoo-db")
+  name=lower("aws-rds-cluster-parameter-group-prod-jihoo-aurora-jihoo-db")
   family      = var.family #"aurora-mysql8"
   description = "RDS cluster parameter group"
   parameter {
@@ -160,7 +160,7 @@ resource "aws_rds_cluster_parameter_group" "rds-cluster-parameter-group" {
 
 
 resource "aws_db_parameter_group" "rds-instance-parameter-group" {
-  name        = lower("aws-rds-instance-parameter-group-dev-jihoo-aurora-jihoo-db")
+  name        = lower("aws-rds-instance-parameter-group-prod-jihoo-aurora-jihoo-db")
   family = var.family #"aurora-postgresql12"
   parameter {
     name  = "autocommit"

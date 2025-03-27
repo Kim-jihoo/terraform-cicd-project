@@ -1,7 +1,7 @@
 ##Comm (all required)
 variable "stage"{
   type = string
-  default = "dev"
+  default = "prod"
 }
 variable "servicename"{
   type = string
