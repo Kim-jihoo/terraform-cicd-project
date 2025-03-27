@@ -167,8 +167,8 @@ variable "associate_public_ip_address" {
 
 ##KMS
 variable "rds_kms_arn" {
-  type = string
-  default = "arn:aws:kms:ap-northeast-2:471112992234:key/1dbf43f7-1847-434c-bc3c-1beb1b86e480"
+  type    = string
+  default = "arn:aws:kms:ap-northeast-2:762233749320:key/32436012-6187-473c-8449-3a4d90b6d73c"
 }
 variable "ebs_kms_key_id" {
   type = string
