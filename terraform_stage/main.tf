@@ -125,7 +125,7 @@ module "ecs_instance" {
 
   rds_instance_count = var.rds_instance_count
   kms_key_id         = var.rds_kms_arn
-
+  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
   depends_on = [module.vpc]
 }
 
