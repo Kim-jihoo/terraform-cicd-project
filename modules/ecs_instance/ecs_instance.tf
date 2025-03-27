@@ -6,13 +6,17 @@ resource "aws_launch_template" "ecs_instance" {
     name = var.instance_profile_name
   }
   key_name = var.key_name
-  user_data = base64encode(<<EOF
+
+user_data = base64encode(<<EOF
 #!/bin/bash
 echo ECS_CLUSTER=${var.cluster_name} >> /etc/ecs/ecs.config
 echo ECS_BACKEND_HOST=ecs.amazonaws.com >> /etc/ecs/ecs.config
+
+yum install -y ecs-init
 systemctl enable --now ecs
 EOF
-  )
+)
+
 
 
 
