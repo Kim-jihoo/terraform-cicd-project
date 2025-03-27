@@ -3,7 +3,7 @@ resource "aws_security_group" "sg-aurora" {
   vpc_id = var.network_vpc_id
 
   ingress {
-    description = ""
+    description = "Allow Aurora access from allowed CIDR blocks"
     from_port   = 3306
     to_port     = 3306
     protocol    = "TCP"
@@ -11,7 +11,7 @@ resource "aws_security_group" "sg-aurora" {
   }
 
   ingress {
-    description = ""
+    description = "Allow Aurora access from allowed SGs"
     from_port       = 3306
     to_port         = 3306
     protocol        = "TCP"
@@ -24,19 +24,25 @@ resource "aws_security_group" "sg-aurora" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 0
     to_port     = 65535
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = merge(tomap({
-         Name =  "aws-sg-${var.stage}-${var.servicename}-aurora-${var.dbname}"}),
-        var.tags)
+
+  tags = merge(
+    {
+      Name = "aws-sg-${var.stage}-${var.servicename}-aurora-${var.dbname}"
+    },
+    var.tags
+  )
 }
