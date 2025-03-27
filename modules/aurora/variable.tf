@@ -24,9 +24,9 @@ variable "engine" {
   default = "aurora-mysql"
 }
 
-variable "engine_version"{
-  type= string
-  default = "8.0.mysql_aurora.3.01.0"
+variable "engine_version" {
+  type    = string
+  default = "8.0.mysql_aurora.3.04.0"
 }
 variable "master_username"{
   type = string
