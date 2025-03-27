@@ -31,7 +31,7 @@ resource "aws_rds_cluster_instance" "rds-instance" {
   engine                     = var.engine
   engine_version             = var.engine_version
   instance_class             = var.rds_instance_class
-#  db_parameter_group_name    = aws_db_parameter_group.rds-instance-parameter-group.name
+  db_parameter_group_name = aws_db_parameter_group.rds-instance-parameter-group.name
   auto_minor_version_upgrade = var.rds_instance_auto_minor_version_upgrade
   publicly_accessible        = var.rds_instance_publicly_accessible
   # monitoring_role_arn        = var.monitoring_role_arn
