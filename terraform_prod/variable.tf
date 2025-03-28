@@ -237,6 +237,8 @@ variable "s3_origin_id" {
   default     = "frontend-s3-origin"
 }
 variable "aws_account_id" {
-  type = string
-  description = "762233749320"
+  type        = string
+  description = "AWS 계정 ID"
+  default     = "762233749320"
 }
+
