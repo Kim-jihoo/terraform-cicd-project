@@ -38,3 +38,8 @@ variable "s3_origin_id" {
   description = "A unique ID to identify the origin in CloudFront"
   type        = string
 }
+variable "waf_web_acl_id" {
+  type        = string
+  description = "WAF Web ACL ARN"
+  default     = null
+}
