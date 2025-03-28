@@ -1,14 +1,7 @@
-resource "aws_cloudfront_origin_access_control" "frontend" {
-  name                              = "frontend-oac"
-  description                       = "OAC for frontend S3"
-  origin_access_control_origin_type = "s3"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
-}
-
 resource "aws_cloudfront_distribution" "frontend" {
   enabled             = true
   default_root_object = var.default_root_object
+  aliases             = ["jihoo.click", "www.jihoo.click"]
 
   origin {
     domain_name = var.s3_bucket_domain_name
@@ -36,7 +29,9 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = var.viewer_certificate_acm_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   restrictions {
