@@ -140,6 +140,7 @@ module "frontend_cloudfront" {
   s3_origin_id             = var.s3_origin_id
   viewer_certificate_acm_arn = var.viewer_certificate_acm_arn
   domain_alias             = "jihoo.click"
+  waf_web_acl_id           = module.waf.waf_acl_arn
 }
 
 
@@ -176,7 +177,15 @@ resource "aws_route53_record" "frontend_www" {
   }
 }
 
-
+#WAF
+module "waf" {
+  source       = "../modules/waf"
+  name         = "jihoo-waf"
+  description  = "WAF for CloudFront"
+  scope        = "CLOUDFRONT"
+  metric_name  = "jihooWAF"
+  tags         = var.tags
+}
 
 # module "jihoo-ec2" {
 #   source              = "../modules/instance"
