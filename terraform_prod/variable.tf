@@ -89,10 +89,7 @@ variable "domain" {
   default = "" # ex: example.com
 }
 
-variable "hostzone_id" {
-  type    = string
-  default = "" # Route 53 호스팅존 ID
-}
+
 variable "port" {
   type    = string
   default = "80"
