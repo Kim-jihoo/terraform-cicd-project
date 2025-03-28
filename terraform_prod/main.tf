@@ -135,12 +135,13 @@ module "frontend_cloudfront" {
   tags                     = var.tags
   default_root_object      = "index.html"
   error_page               = "error.html"
-  s3_bucket_id             = module.frontend_s3.s3_bucket_id 
-  s3_bucket_domain_name    = "jihoo-frontend-static-prod.s3.ap-northeast-2.amazonaws.com" # 또는 output 참조 가능
-  s3_origin_id             = "frontend-s3-origin"  # 자유롭게 설정 가능
-  viewer_certificate_acm_arn = "" # 기본 인증서 사용할 경우 생략 가능
-  domain_alias             = ""  # 커스텀 도메인 없으면 생략
+  s3_bucket_id             = module.frontend_s3.s3_bucket_id
+  s3_bucket_domain_name    = var.s3_bucket_domain_name
+  s3_origin_id             = var.s3_origin_id
+  viewer_certificate_acm_arn = var.viewer_certificate_acm_arn
+  domain_alias             = "jihoo.click"
 }
+
 
 module "frontend_s3" {
   source                      = "../modules/s3_static"

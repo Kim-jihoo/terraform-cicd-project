@@ -243,4 +243,8 @@ variable "hostzone_id" {
   type    = string
   default = "Z0081242AVNDKVPTQC93"
 }
+variable "viewer_certificate_acm_arn" {
+  type    = string
+  default = "arn:aws:acm:us-east-1:762233749320:certificate/c630bd43-78e6-4d0a-b9e1-3c10f21eb28b"
+}
 
