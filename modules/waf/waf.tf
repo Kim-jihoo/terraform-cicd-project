@@ -1,4 +1,5 @@
 resource "aws_wafv2_web_acl" "this" {
+  provider    = aws.use1  # 추가
   name        = var.name
   description = var.description
   scope       = var.scope # "CLOUDFRONT" or "REGIONAL"
