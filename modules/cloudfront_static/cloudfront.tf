@@ -8,13 +8,16 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
 
 resource "aws_cloudfront_distribution" "frontend" {
   enabled             = true
-  default_root_object = "index.html"
+  default_root_object = var.default_root_object
 
   origin {
     domain_name = var.s3_bucket_domain_name
     origin_id   = var.s3_origin_id
 
     origin_access_control_id = aws_cloudfront_origin_access_control.frontend.id
+    s3_origin_config {
+      origin_access_identity = null
+    }
   }
 
   default_cache_behavior {
@@ -24,7 +27,6 @@ resource "aws_cloudfront_distribution" "frontend" {
 
     forwarded_values {
       query_string = false
-
       cookies {
         forward = "none"
       }
