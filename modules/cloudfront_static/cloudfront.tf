@@ -16,7 +16,7 @@ resource "aws_cloudfront_distribution" "frontend" {
 
     origin_access_control_id = aws_cloudfront_origin_access_control.frontend.id
     s3_origin_config {
-      origin_access_identity = null
+      origin_access_identity = ""
     }
   }
 
