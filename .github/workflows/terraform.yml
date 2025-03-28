@@ -23,19 +23,80 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
+  S3_BUCKET: jihoo-terraform-state
+  DYNAMODB_TABLE: jihoo-terraform-state
+  ALB_LOG_BUCKET: jihoo-alb-access-logs
 
 jobs:
-  terraform:
-    name: 'Terraform Setup & Deploy (Dev)'
+  backend_setup:
+    name: 'Check & Create Backend Resources'
     if: github.event.inputs.confirm_destroy != 'DESTROY' || github.event.inputs.confirm_destroy == null
     runs-on: ubuntu-latest
-    environment: dev
-    defaults:
-      run:
-        shell: bash
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check and Initialize Terraform Backend
+        run: |
+          check_bucket_exists() {
+            BUCKET_NAME="$1"
+            output=$(aws s3 ls "s3://$BUCKET_NAME" 2>&1)
+            if echo "$output" | grep -q 'NoSuchBucket'; then echo "false"
+            elif echo "$output" | grep -q 'Access Denied'; then echo "access denied"
+            else echo "true"
+            fi
+          }
+
+          check_dynamodb_exists() {
+            TABLE_NAME="$1"
+            output=$(aws dynamodb describe-table --table-name "$TABLE_NAME" 2>&1)
+            if echo "$output" | grep -q 'ResourceNotFoundException'; then echo "false"
+            elif echo "$output" | grep -q 'AccessDeniedException'; then echo "access denied"
+            else echo "true"
+            fi
+          }
+
+          BUCKET_EXISTS=$(check_bucket_exists "$S3_BUCKET")
+          DYNAMODB_EXISTS=$(check_dynamodb_exists "$DYNAMODB_TABLE")
+          ALB_BUCKET_EXISTS=$(check_bucket_exists "$ALB_LOG_BUCKET")
+
+          if [ -d backend ]; then cd backend
+          else echo "backend 디렉토리가 없습니다." && exit 1
+          fi
+
+          if [ "$BUCKET_EXISTS" = "true" ] && [ "$DYNAMODB_EXISTS" = "true" ]; then
+            echo "S3와 DynamoDB가 존재합니다. 생성 생략"
+          elif [ "$BUCKET_EXISTS" = "access denied" ] || [ "$DYNAMODB_EXISTS" = "access denied" ]; then
+            echo "자격 증명 문제 발생" && exit 1
+          else
+            echo "S3 또는 DynamoDB가 없어 생성을 진행합니다"
+            terraform init
+            terraform apply -auto-approve
+          fi
+
+          if [ "$ALB_BUCKET_EXISTS" = "false" ]; then
+            echo "ALB 로그용 S3 버킷을 생성합니다"
+            terraform apply -target=aws_s3_bucket.alb_logs -auto-approve
+          fi
+
+  terraform_dev:
+    name: 'Terraform Apply (Dev)'
+    needs: backend_setup
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    environment: dev
+    steps:
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup Terraform
@@ -53,22 +114,19 @@ jobs:
           cd terraform_dev
           terraform init \
             -backend-config="region=${{ env.AWS_REGION }}" \
-            -backend-config="bucket=jihoo-terraform-state" \
+            -backend-config="bucket=${{ env.S3_BUCKET }}" \
             -backend-config="key=dev/terraform/terraform.tfstate"
           terraform plan -input=false
           terraform apply -auto-approve -input=false
 
   terraform_prod:
-    name: 'Terraform Setup & Deploy (Prod)'
-    if: (github.ref == 'refs/heads/main') && (github.event.inputs.confirm_destroy != 'DESTROY' || github.event.inputs.confirm_destroy == null)
+    name: 'Terraform Apply (Prod)'
+    needs: [backend_setup, terraform_dev]
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: prod
-    defaults:
-      run:
-        shell: bash
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup Terraform
@@ -86,7 +144,7 @@ jobs:
           cd terraform_prod
           terraform init \
             -backend-config="region=${{ env.AWS_REGION }}" \
-            -backend-config="bucket=jihoo-terraform-state" \
+            -backend-config="bucket=${{ env.S3_BUCKET }}" \
             -backend-config="key=prod/terraform/terraform.tfstate"
           terraform plan -input=false
           terraform apply -auto-approve -input=false
@@ -96,7 +154,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.confirm_destroy == 'DESTROY'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup Terraform
@@ -109,11 +167,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Init & Destroy
+      - name: Terraform Destroy
         run: |
           cd terraform_${{ github.event.inputs.environment }}
           terraform init \
             -backend-config="region=${{ env.AWS_REGION }}" \
-            -backend-config="bucket=jihoo-terraform-state" \
+            -backend-config="bucket=${{ env.S3_BUCKET }}" \
             -backend-config="key=${{ github.event.inputs.environment }}/terraform/terraform.tfstate"
           terraform destroy -auto-approve
