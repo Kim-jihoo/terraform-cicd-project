@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
+  }
+}
+
+
 resource "aws_wafv2_web_acl" "this" {
   provider    = aws.use1  # 추가
   name        = var.name
