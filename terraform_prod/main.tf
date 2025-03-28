@@ -130,11 +130,25 @@ module "ecs_instance" {
   sg_allow_ingress_sg_list_aurora = var.sg_allow_ingress_sg_list_aurora
   depends_on = [module.vpc]
 }*/
-module "frontend_s3" {
-  source      = "../modules/s3_static"
-  bucket_name = "jihoo-frontend-static-prod"
-  tags        = var.tags
+module "frontend_cloudfront" {
+  source                   = "../modules/cloudfront_static"
+  tags                     = var.tags
+  default_root_object      = "index.html"
+  error_page               = "error.html"
+  s3_bucket_id             = module.frontend_s3.s3_bucket_id 
+  s3_bucket_domain_name    = "jihoo-frontend-static-prod.s3.ap-northeast-2.amazonaws.com" # 또는 output 참조 가능
+  s3_origin_id             = "frontend-s3-origin"  # 자유롭게 설정 가능
+  viewer_certificate_acm_arn = "" # 기본 인증서 사용할 경우 생략 가능
+  domain_alias             = ""  # 커스텀 도메인 없으면 생략
 }
+
+module "frontend_s3" {
+  source                      = "../modules/s3_static"
+  bucket_name                 = "jihoo-frontend-static-prod"
+  tags                        = var.tags
+  cloudfront_distribution_arn = module.frontend_cloudfront.cloudfront_distribution_id
+}
+
 
 
 # module "jihoo-ec2" {

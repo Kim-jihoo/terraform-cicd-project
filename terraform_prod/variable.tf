@@ -224,3 +224,15 @@ variable "sg_allow_ingress_sg_list_aurora" {
   type    = list(string)
   default = []
 }
+# CloudFront용 변수
+variable "s3_bucket_domain_name" {
+  description = "The domain name of the S3 bucket used as CloudFront origin"
+  type        = string
+  default     = "jihoo-frontend-static-prod.s3.ap-northeast-2.amazonaws.com"
+}
+
+variable "s3_origin_id" {
+  description = "The unique origin ID used in CloudFront distribution"
+  type        = string
+  default     = "frontend-s3-origin"
+}
