@@ -149,6 +149,18 @@ module "frontend_s3" {
   cloudfront_distribution_arn = "arn:aws:cloudfront::${var.aws_account_id}:distribution/${module.frontend_cloudfront.cloudfront_distribution_id}"
 }
 
+# Route53
+resource "aws_route53_record" "frontend" {
+  zone_id = var.hostzone_id
+  name    = "jihoo.click"
+  type    = "A"
+
+  alias {
+    name                   = module.frontend_cloudfront.cloudfront_domain_name
+    zone_id                = module.frontend_cloudfront.cloudfront_hosted_zone_id
+    evaluate_target_health = false
+  }
+}
 
 
 

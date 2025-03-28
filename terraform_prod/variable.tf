@@ -242,3 +242,8 @@ variable "aws_account_id" {
   default     = "762233749320"
 }
 
+variable "hostzone_id" {
+  type    = string
+  default = "Z0081242AVNDKVPTQC93"
+}
+
