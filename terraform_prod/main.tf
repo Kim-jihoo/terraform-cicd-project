@@ -163,6 +163,19 @@ resource "aws_route53_record" "frontend" {
   }
 }
 
+#Route53 A레코드
+resource "aws_route53_record" "frontend_www" {
+  zone_id = var.hostzone_id
+  name    = "www.jihoo.click"
+  type    = "A"
+
+  alias {
+    name                   = module.frontend_cloudfront.cloudfront_domain_name
+    zone_id                = module.frontend_cloudfront.cloudfront_hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 
 
 # module "jihoo-ec2" {
