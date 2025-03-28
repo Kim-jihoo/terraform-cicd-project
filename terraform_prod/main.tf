@@ -110,7 +110,8 @@ module "ecs_instance" {
   cluster_name         = module.ecs.ecs_cluster_name
 }
 
-#RDS
+#RDS 시간 너무 오래 걸려서 일단 주석
+/*
  module "rds" {
   source       = "../modules/aurora"
   stage        = var.stage
@@ -128,7 +129,13 @@ module "ecs_instance" {
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
   sg_allow_ingress_sg_list_aurora = var.sg_allow_ingress_sg_list_aurora
   depends_on = [module.vpc]
+}*/
+module "frontend_s3" {
+  source      = "../modules/s3_static"
+  bucket_name = "jihoo-frontend-static-prod"
+  tags        = var.tags
 }
+
 
 # module "jihoo-ec2" {
 #   source              = "../modules/instance"
