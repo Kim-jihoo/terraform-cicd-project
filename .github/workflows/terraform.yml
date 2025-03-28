@@ -50,10 +50,9 @@ jobs:
         run: |
           check_bucket_exists() {
             BUCKET_NAME="$1"
-            output=$(aws s3 ls "s3://$BUCKET_NAME" 2>&1)
-            if echo "$output" | grep -q 'NoSuchBucket'; then echo "false"
-            elif echo "$output" | grep -q 'Access Denied'; then echo "access denied"
-            else echo "true"
+            aws s3api head-bucket --bucket "$BUCKET_NAME" >/dev/null 2>&1
+            if [ $? -eq 0 ]; then echo "true"
+            else echo "false"
             fi
           }
 
@@ -75,17 +74,20 @@ jobs:
           fi
 
           if [ "$BUCKET_EXISTS" = "true" ] && [ "$DYNAMODB_EXISTS" = "true" ]; then
-            echo "S3와 DynamoDB가 존재합니다. 생성 생략"
+            echo "S3와 DynamoDB가 이미 존재합니다. 생성 생략"
           elif [ "$BUCKET_EXISTS" = "access denied" ] || [ "$DYNAMODB_EXISTS" = "access denied" ]; then
             echo "자격 증명 문제 발생" && exit 1
           else
-            echo "S3 또는 DynamoDB가 없어 생성을 진행합니다"
+            echo "S3 또는 DynamoDB가 없어 생성합니다"
             terraform init
             terraform apply -auto-approve
           fi
 
-          if [ "$ALB_BUCKET_EXISTS" = "false" ]; then
+          if [ "$ALB_BUCKET_EXISTS" = "true" ]; then
+            echo "ALB 로그용 S3 버킷이 이미 존재합니다. 생성 생략"
+          else
             echo "ALB 로그용 S3 버킷을 생성합니다"
+            terraform init
             terraform apply -target=aws_s3_bucket.alb_logs -auto-approve
           fi
 
