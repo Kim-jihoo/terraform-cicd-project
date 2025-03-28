@@ -236,3 +236,7 @@ variable "s3_origin_id" {
   type        = string
   default     = "frontend-s3-origin"
 }
+variable "aws_account_id" {
+  type = string
+  description = "762233749320"
+}

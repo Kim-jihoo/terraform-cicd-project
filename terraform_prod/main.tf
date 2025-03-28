@@ -146,8 +146,9 @@ module "frontend_s3" {
   source                      = "../modules/s3_static"
   bucket_name                 = "jihoo-frontend-static-prod"
   tags                        = var.tags
-  cloudfront_distribution_arn = module.frontend_cloudfront.cloudfront_distribution_id
+  cloudfront_distribution_arn = "arn:aws:cloudfront::${var.aws_account_id}:distribution/${module.frontend_cloudfront.cloudfront_distribution_id}"
 }
+
 
 
 
