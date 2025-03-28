@@ -195,10 +195,10 @@ module "waf" {
   scope        = "CLOUDFRONT"
   metric_name  = "jihooWAF"
   tags         = var.tags
-/* destroy 임시 제거
+
   providers = {
     aws = aws.use1
-  }*/
+  }
 }
 
 
