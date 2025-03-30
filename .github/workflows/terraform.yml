@@ -140,6 +140,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+      - name: (임시) WAF 리소스를 state에서 제거
+        run: |
+          cd terraform_prod
+          terraform init \
+            -backend-config="region=${{ env.AWS_REGION }}" \
+            -backend-config="bucket=${{ env.S3_BUCKET }}" \
+            -backend-config="key=prod/terraform/terraform.tfstate"
+          terraform state rm module.waf.aws_wafv2_web_acl.this || true
 
       - name: Terraform Plan & Apply (Prod)
         run: |
