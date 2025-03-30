@@ -140,7 +140,7 @@ module "frontend_cloudfront" {
   s3_origin_id             = var.s3_origin_id
   viewer_certificate_acm_arn = var.viewer_certificate_acm_arn
   domain_alias             = "jihoo.click"
-  waf_web_acl_id           = module.waf.waf_acl_arn
+ // waf_web_acl_id           = module.waf.waf_acl_arn
 }
 
 
