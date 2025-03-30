@@ -149,16 +149,14 @@ jobs:
             -backend-config="bucket=${{ env.S3_BUCKET }}" \
             -backend-config="key=prod/terraform/terraform.tfstate"
   
-      - name: Terraform Plan (provider context 로드)
+    
+      - name: Init before state rm
         run: |
           cd terraform_prod
-          terraform apply -auto-approve -input=false -refresh=false || true
-
-  
-      - name: Remove WAF resource from state
-        run: |
-          cd terraform_prod
-          terraform state rm module.waf.aws_wafv2_web_acl.this || true
+          terraform init \
+            -backend-config="region=${{ env.AWS_REGION }}" \
+            -backend-config="bucket=${{ env.S3_BUCKET }}" \
+            -backend-config="key=prod/terraform/terraform.tfstate"
   
       - name: Terraform Plan & Apply (Prod)
         run: |

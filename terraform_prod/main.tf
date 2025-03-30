@@ -178,6 +178,7 @@ resource "aws_route53_record" "frontend_www" {
 }
 
 #WAF
+/*
 module "waf" {
   source       = "../modules/waf"
   name         = "jihoo-waf"
@@ -189,7 +190,7 @@ module "waf" {
   providers = {
     aws = aws.use1
   }
-}
+}*/
 
 
 # module "jihoo-ec2" {
