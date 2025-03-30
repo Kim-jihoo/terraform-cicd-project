@@ -152,7 +152,8 @@ jobs:
       - name: Terraform Plan (provider context 로드)
         run: |
           cd terraform_prod
-          terraform plan -input=false -refresh=false || true
+          terraform apply -auto-approve -input=false -refresh=false || true
+
   
       - name: Remove WAF resource from state
         run: |
