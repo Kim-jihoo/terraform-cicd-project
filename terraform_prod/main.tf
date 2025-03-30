@@ -1,13 +1,3 @@
-# region 선언(waf로 이제 명시적으로 선언해줘야함)
-provider "aws" {
-  region = "ap-northeast-2"
-}
-
-provider "aws" {
-  alias  = "use1"
-  region = "us-east-1"
-}
-
 terraform {
  required_version = ">= 1.0.0, < 2.0.0"
 
